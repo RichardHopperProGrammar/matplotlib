@@ -449,9 +449,26 @@ def validate_suptitle_ha(s):
     """
     Validate horizontal alignment for suptitle rcParams.
     """
-    return _str_to_one_of(
-        ['center', 'left', 'right', 'center_left', 'center_right'],
-    )(s)
+    valid = ('center', 'left', 'right', 'center_left', 'center_right')
+    if s in valid:
+        return s
+    raise ValueError(
+        f'{s} is not a valid suptitle horizontal alignment. '
+        f'Valid values are: {valid}'
+    )
+
+
+def validate_verticalalignment(s):
+    """
+    Validate vertical alignment for text rcParams.
+    """
+    valid = ('top', 'center', 'bottom', 'baseline', 'sup')
+    if s in valid:
+        return s
+    raise ValueError(
+        f'{s} is not a valid vertical alignment. '
+        f'Valid values are: {valid}'
+    )
 
 
 def validate_fontweight(s):
@@ -1359,8 +1376,6 @@ _validators = {
     "figure.titlesize":            validate_fontsize,
     "figure.titleweight":          validate_fontweight,
     "figure.title_horizontalalignment": validate_suptitle_ha,
-    # Validate that suptitle rcParams are set together to avoid inconsistent defaults
-    # if someone sets ha but not va (or vice versa) — the pair should change together.
     "figure.title_verticalalignment":   validate_verticalalignment,
 
     # figure labels
